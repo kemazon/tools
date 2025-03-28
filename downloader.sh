@@ -96,7 +96,7 @@ MainMenu() {
 
 sudo chmod 666 /dev/uinput
 
-export SDL_GAMECONTROLLERCONFIG_FILE="/opt/inttools/gamepads.txt"
+export SDL_GAMECONTROLLERCONFIG_FILE="/opt/inttools/gamecontrollerdb.txt"
 export TEXTINPUTPRESET="My Name"        # defines preset text to insert
 export TEXTINPUTINTERACTIVE="Y"         # enables interactive text input mode
 export TEXTINPUTNOAUTOCAPITALS="Y"      # disables automatic capitalisation of first letter of words in interactive text input mode
@@ -106,7 +106,7 @@ export TEXTINPUTNUMBERSONLY="Y"         # only scrolls integers 0 - 9 in interac
 if [[ ! -z $(pgrep -f gptokeyb) ]]; then
   pgrep -f gptokeyb | sudo xargs kill -9
 fi
-/opt/inttools/gptokeyb textinput -1 "downloader.sh" -c "/opt/inttools/keys2.gptk" > /dev/null 2>&1 &
+/opt/inttools/gptokeyb textinput -1 "downloader.sh" -c "/opt/inttools/downloader.gptk" > /dev/null 2>&1 &
 printf "\033c" > /dev/tty1
 dialog --clear
 trap ExitMenu EXIT
