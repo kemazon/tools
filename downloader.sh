@@ -65,7 +65,7 @@ ExitMenu() {
 Connect() {
   dialog --infobox "\nAbriendo la WEB ..." 5 $width > /dev/tty1
   sleep 1
-  lynx "https://myrient.erista.me/files/"
+  lynx "https://myrient.erista.me/files/" -nomore
 }
 
 MainMenu() {
