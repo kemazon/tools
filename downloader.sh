@@ -1,6 +1,6 @@
 #!/bin/bash
 #sudo nmui
-
+#mod
 sudo chmod 666 /dev/tty1
 #printf "\033c" > /dev/tty1
 reset
