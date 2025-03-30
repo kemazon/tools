@@ -1,4 +1,5 @@
 #!/bin/bash
+printf "\033c" > /dev/tty1
 lsusb
 # Verificar si el adaptador Wi-Fi está detectado por el sistema
 echo "Revisando adaptador Wi-Fi en puerto OTG..."
