@@ -5,8 +5,10 @@ lsusb
 echo "Revisando adaptador Wi-Fi en puerto OTG..."
 if lsusb | grep -i "wifi\|wireless"; then
     echo "Adaptador Wi-Fi detectado."
+    sleep 5
 else
     echo "Adaptador Wi-Fi no detectado en lsusb."
+    sleep 5
     exit 1
 fi
 
