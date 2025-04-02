@@ -16,6 +16,7 @@ if ip link show | grep -q "wlan0"; then
     ip link show | grep "wlan0"
 else
     echo "No se detectó interfaz Wi-Fi."
+    pause 5
     exit 1
 fi
 
