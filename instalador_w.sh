@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Lista de paquetes requeridos
-REQUIRED_PACKAGES=("usbutils")
+REQUIRED_PACKAGES=("usbutils" "dkms")
 
 # URL del script a descargar
 SCRIPT_URL="https://raw.githubusercontent.com/kemazon/tools/refs/heads/main/w.sh"
