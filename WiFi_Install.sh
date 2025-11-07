@@ -1,12 +1,16 @@
 #!/bin/bash
 # Agregar regla de usb_modeswitch para Realtek 8211CU
 
-RULE_FILE="/lib/udev/rules.d/40-usb_modeswitch.rules"
-RULE_LINE='# Realtek 8211CU Wifi AC USB\nATTR{idVendor}=="0bda", ATTR{idProduct}=="1a2b", RUN+="/usr/sbin/usb_modeswitch -K -v 0bda -p 1a2b"'
+sudo chmod 777 /tmp
+sudo chmod u+s $(which ping)
 
 REQUIRED_PACKAGES=("dkms")
 
-sudo chmod u+s $(which ping)
+RULE_FILE="/lib/udev/rules.d/40-usb_modeswitch.rules"
+TMP_FILE="/tmp/40-usb_modeswitch.rules.tmp"
+
+RULE_COMMENT="# Realtek 8211CU Wifi AC USB"
+RULE_CONTENT='ATTR{idVendor}=="0bda", ATTR{idProduct}=="1a2b", RUN+="/usr/sbin/usb_modeswitch -K -v 0bda -p 1a2b"'
 
 # Verifica conexión a internet
 check_internet() {
@@ -41,16 +45,26 @@ install_packages() {
 check_internet
 install_packages
 
-# Verificar si ya existe
-if ! grep -q '0bda.*1a2b' "$RULE_FILE"; then
-    echo -e "\n$RULE_LINE" | sudo tee -a "$RULE_FILE" > /dev/null
-    echo "[√] Regla agregada correctamente a $RULE_FILE"
-	sleep 3
-else
-    echo "[X] La regla ya existe, no se ha agregado."
-    sleep 5
+# Comprobar si ya existe
+if grep -q '0bda.*1a2b' "$RULE_FILE"; then
+    echo "⚠️ La regla ya existe en $RULE_FILE"
+    exit 0
 fi
 
-# Recargar reglas de udev
+# Insertar antes de LABEL="modeswitch_rules_end"
+sudo awk -v cmt="$RULE_COMMENT" -v rule="$RULE_CONTENT" '
+    /LABEL="modeswitch_rules_end"/ {
+        print cmt "\n" rule "\n"
+    }
+    { print }
+' "$RULE_FILE" | sudo tee "$TMP_FILE" > /dev/null
+
+# Reemplazar el archivo original
+sudo mv "$TMP_FILE" "$RULE_FILE"
+sudo chmod 644 "$RULE_FILE"
+
+echo "[√] Regla agregada correctamente"
+
+# Recargar reglas
 sudo udevadm control --reload
 sudo udevadm trigger
